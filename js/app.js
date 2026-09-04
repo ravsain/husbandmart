@@ -2,6 +2,28 @@
   "use strict";
 
   /* =========================================================
+     EMAILJS CONFIG
+     Create a free account at https://www.emailjs.com, connect
+     your Gmail/Outlook as an Email Service, and build a template
+     whose "To Email" field is set to {{to_email}} (not a fixed
+     address). Paste your three keys below — see readme.md for
+     the full walkthrough and the template fields it expects.
+     ========================================================= */
+  var EMAILJS_CONFIG = {
+    serviceId: "PASTE_YOUR_SERVICE_ID",
+    templateId: "PASTE_YOUR_TEMPLATE_ID",
+    publicKey: "PASTE_YOUR_PUBLIC_KEY"
+  };
+
+  var emailjsReady = false;
+  if (window.emailjs && EMAILJS_CONFIG.publicKey.indexOf("PASTE_") !== 0) {
+    window.emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+    emailjsReady = true;
+  } else {
+    console.warn("HusbandMart: EmailJS is not configured yet — order confirmations won't be emailed. See readme.md.");
+  }
+
+  /* =========================================================
      PRODUCT CATALOG
      Edit this list to add, remove, or reprice products.
      `cats` values must match a slug in CATEGORIES below.
@@ -39,8 +61,12 @@
   var state = {
     cart: {},         // productId -> quantity
     activeCategory: "all",
-    searchTerm: ""
+    searchTerm: "",
+    wifeEmail: "",
+    husbandEmail: ""
   };
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   var fmt = function (n) {
     return n === 0 ? "₹0" : "₹" + n.toLocaleString("en-IN");
@@ -194,9 +220,9 @@
   }
 
   /* ---------------------------------------------------------
-     Checkout flow (4 steps: review -> reveal -> confirm -> surprise)
+     Checkout flow (5 steps: review -> emails -> reveal -> confirm -> surprise)
      --------------------------------------------------------- */
-  var checkoutSteps = ["step1", "step2", "step3", "step4"].map($);
+  var checkoutSteps = ["step1", "stepEmails", "step2", "step3", "step4"].map($);
 
   function showCheckoutStep(index) {
     checkoutSteps.forEach(function (step, i) { step.classList.toggle("active", i === index); });
@@ -236,6 +262,64 @@
     var stamp = now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate());
     var suffix = Math.floor(1000 + Math.random() * 9000);
     return "HM-" + stamp + "-" + suffix;
+  }
+
+  function buildItemListText() {
+    return Object.keys(state.cart).map(function (id) {
+      var p = PRICE_MAP[id];
+      return p.emoji + " " + p.name + "  ×" + state.cart[id] + "  —  " + fmt(p.price * state.cart[id]);
+    }).join("\n");
+  }
+
+  /* ---------------------------------------------------------
+     Order confirmation emails, sent via EmailJS to both addresses
+     collected at checkout. Each send is independent so one
+     failing (e.g. a typo) doesn't block the other.
+     --------------------------------------------------------- */
+  function sendOrderEmails(orderId) {
+    var statusEl = $("emailStatus");
+    statusEl.hidden = false;
+    statusEl.className = "email-status";
+
+    if (!emailjsReady) {
+      statusEl.textContent = "✉️ Email sending isn't configured yet (see readme.md).";
+      statusEl.classList.add("err");
+      return;
+    }
+
+    statusEl.textContent = "Sending confirmation to both inboxes…";
+
+    var recipients = [
+      { to_email: state.wifeEmail, to_name: "Wife" },
+      { to_email: state.husbandEmail, to_name: "Husband" }
+    ];
+    var itemList = buildItemListText();
+    var total = fmt(cartTotal());
+
+    var sends = recipients.map(function (r) {
+      return window.emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+        to_email: r.to_email,
+        to_name: r.to_name,
+        order_id: orderId,
+        item_list: itemList,
+        total: total
+      });
+    });
+
+    Promise.allSettled(sends).then(function (results) {
+      var okCount = results.filter(function (r) { return r.status === "fulfilled"; }).length;
+      if (okCount === recipients.length) {
+        statusEl.textContent = "✓ Sent to both inboxes ❤️";
+        statusEl.classList.add("ok");
+      } else if (okCount > 0) {
+        statusEl.textContent = "✓ Sent to " + okCount + " of " + recipients.length + " — check the other email address.";
+        statusEl.classList.add("err");
+      } else {
+        statusEl.textContent = "Couldn't send the emails — double-check the addresses and try again.";
+        statusEl.classList.add("err");
+        console.error("HusbandMart: EmailJS send failed", results);
+      }
+    });
   }
 
   /* ---------------------------------------------------------
@@ -345,25 +429,45 @@
     });
     $("closeCheckout").addEventListener("click", closeCheckout);
 
-    $("revealPriceBtn").addEventListener("click", function () {
-      $("oldTotal").textContent = fmt(cartTotal());
+    $("toEmailsBtn").addEventListener("click", function () {
       showCheckoutStep(1);
+    });
+
+    $("revealPriceBtn").addEventListener("click", function () {
+      var wifeEmail = $("wifeEmail").value.trim();
+      var husbandEmail = $("husbandEmail").value.trim();
+      var valid = EMAIL_RE.test(wifeEmail) && EMAIL_RE.test(husbandEmail);
+      $("emailError").hidden = valid;
+      if (!valid) return;
+
+      state.wifeEmail = wifeEmail;
+      state.husbandEmail = husbandEmail;
+      $("oldTotal").textContent = fmt(cartTotal());
+      showCheckoutStep(2);
       burstHearts(14);
     });
 
     $("placeOrderBtn").addEventListener("click", function () {
-      $("orderId").textContent = "Order #" + generateOrderId();
-      showCheckoutStep(2);
+      var orderId = generateOrderId();
+      $("orderId").textContent = "Order #" + orderId;
+      $("emailStatus").hidden = true;
+      showCheckoutStep(3);
+      sendOrderEmails(orderId);
     });
 
     $("surpriseBtn").addEventListener("click", function () {
-      showCheckoutStep(3);
+      showCheckoutStep(4);
       burstHearts(22);
     });
 
     $("restartBtn").addEventListener("click", function () {
       closeCheckout();
       state.cart = {};
+      state.wifeEmail = "";
+      state.husbandEmail = "";
+      $("wifeEmail").value = "";
+      $("husbandEmail").value = "";
+      $("emailError").hidden = true;
       renderCart();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });

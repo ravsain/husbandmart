@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 </head>
 <body>
 
@@ -207,18 +208,34 @@
     <div class="co-close"><button class="icon-btn" id="closeCheckout">✕</button></div>
 
     <div class="co-step active" id="step1">
-      <div class="eyebrow">Step 1 of 3</div>
+      <div class="eyebrow">Step 1 of 4</div>
       <h3>Order Review</h3>
       <div id="reviewLines" style="margin-top:14px;"></div>
       <div class="co-total">
         <span>Total</span>
         <span class="new-total tab-num" id="reviewTotal">₹0</span>
       </div>
+      <button class="btn btn-primary btn-block" style="margin-top:22px;" id="toEmailsBtn">Continue →</button>
+    </div>
+
+    <div class="co-step" id="stepEmails">
+      <div class="eyebrow">Step 2 of 4</div>
+      <h3>Who's This For?</h3>
+      <p style="margin-top:10px;color:var(--muted);font-size:14.5px;">We'll email the order confirmation to both of you.</p>
+      <div class="email-field">
+        <label for="wifeEmail">Wife's email</label>
+        <input type="email" id="wifeEmail" placeholder="wife@example.com" autocomplete="email">
+      </div>
+      <div class="email-field">
+        <label for="husbandEmail">Husband's email</label>
+        <input type="email" id="husbandEmail" placeholder="husband@example.com" autocomplete="email">
+      </div>
+      <p class="field-error" id="emailError" hidden>Enter a valid email for both of you — that's where the order confirmation goes.</p>
       <button class="btn btn-primary btn-block" style="margin-top:22px;" id="revealPriceBtn">Reveal My Real Price →</button>
     </div>
 
     <div class="co-step" id="step2">
-      <div class="eyebrow">Step 2 of 3</div>
+      <div class="eyebrow">Step 3 of 4</div>
       <h3>Wait For It…</h3>
       <p style="margin-top:10px;color:var(--muted);font-size:14.5px;">Since you're the wife of the world's luckiest husband —</p>
       <div class="co-total" style="margin-top:18px;">
@@ -239,6 +256,7 @@
       <div class="eyebrow">Order Confirmed</div>
       <h3 id="orderHeadline">Confirmed ❤️</h3>
       <div class="order-id mono" id="orderId"></div>
+      <div class="email-status" id="emailStatus" hidden></div>
       <div style="margin-top:16px;">
         <div class="co-shiprow"><span>Estimated delivery</span><b>Right now</b></div>
         <div class="co-shiprow"><span>Shipping</span><b>Husband, personally</b></div>
