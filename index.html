@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HusbandMart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="toast-stack"></div>
+<div class="scrim" id="scrim"></div>
+<div class="heart-burst" id="heartBurst"></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">🛍️ HUSBAND<span>MART</span></div>
+    <nav class="cats" id="catNav"></nav>
+    <div class="header-actions">
+      <label class="search-box">
+        🔎 <input id="searchInput" type="text" placeholder="Search products…">
+      </label>
+      <button class="cart-btn" id="openCart">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">India's #1 Store for Husbands, Hugs &amp; Unconditional Love</div>
+      <h1>Everything your wife needs.<br>Nothing Amazon can deliver.</h1>
+      <p class="hero-quote">"Because Amazon can't deliver what I can." ❤️</p>
+      <p class="hero-sub">Free-range hugs, artisanal chai, and a same-day "you were right" certificate — sourced entirely from one (1) husband, in stock indefinitely.</p>
+      <div class="trust-row">
+        <span>🚚 Free delivery, always</span>
+        <span>🔒 100% secure feelings</span>
+        <span>↩️ No returns accepted</span>
+        <span>🕐 24/7 husband support</span>
+      </div>
+      <div class="hero-cta">
+        <button class="btn btn-primary" id="heroShopBtn">Start Shopping ❤️</button>
+        <button class="btn btn-ghost" id="heroPlansBtn">See Husband Plans</button>
+      </div>
+    </div>
+    <div class="hero-card">
+      <span class="rec">Most gifted today</span>
+      <div class="emoji-big">👑</div>
+      <h3>Queen Treatment — 24 Hours</h3>
+      <p>Husband becomes your personal assistant. No task too small, no complaint filed.</p>
+      <div class="price-row">
+        <span class="price">₹2,999</span>
+        <button class="add-btn" data-add="queen">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="flash">
+    <div class="flash-inner">
+      <div>
+        <div class="eyebrow">🔥 Today Only · Flash Sale</div>
+        <h3>Husband Listening Service</h3>
+        <ul>
+          <li>✔ Full attention, no phone</li>
+          <li>✔ No interrupting</li>
+          <li>✔ No "but actually…"</li>
+          <li>✔ No solution unless requested</li>
+          <li>✔ Unlimited "Hmm, I understand"</li>
+        </ul>
+        <button class="btn btn-primary" data-add="listening">Grab This Deal</button>
+      </div>
+      <div class="flash-price">
+        <div class="flash-was">₹999</div>
+        <div class="flash-now">FREE</div>
+        <div class="flash-timer tab-num" id="flashTimer">23:59:59 left</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" id="shop">
+  <section style="padding-top:24px;">
+    <div class="section-head">
+      <div class="eyebrow">Shop</div>
+      <h2>Every product is a promise.</h2>
+      <p>Browse by category, or search for exactly what today calls for.</p>
+    </div>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="product-grid" id="productGrid"></div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section id="reviews">
+    <div class="section-head">
+      <div class="eyebrow">Wife Reviews</div>
+      <h2>4.9 out of 5, verified purchases only.</h2>
+    </div>
+    <div class="review-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Bought 2 hours of Husband Time. He actually put his phone in another room. 10/10, would order again."</p>
+        <div class="review-who">— A Very Happy Wife</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"The 'You Were Right' Certificate was delivered surprisingly fast. Already framed it."</p>
+        <div class="review-who">— Anonymous Wife</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>"Ordered the chai. Got chai AND a forehead kiss. Exceeded expectations, will reorder daily."</p>
+        <div class="review-who">— Verified Buyer</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★☆</div>
+        <p>"Queen Treatment lasted the full 24 hours. Docking one star because he still can't find things in the fridge."</p>
+        <div class="review-who">— Regular Customer</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="wrap">
+  <section id="plans">
+    <div class="section-head">
+      <div class="eyebrow">Subscriptions</div>
+      <h2>Choose your Husband Plan.</h2>
+      <p>Cancel anytime. (He won't let you.)</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-tier">Basic</div>
+        <h3>Basic Husband</h3>
+        <div class="plan-price">Free <sub>/ month</sub></div>
+        <ul class="plan-list">
+          <li>5 hugs per month</li>
+          <li>2 dates per month</li>
+          <li>Unlimited love (on request)</li>
+          <li>Standard chai availability</li>
+        </ul>
+        <button class="btn btn-ghost btn-block" data-sub="Basic Husband">Subscribe</button>
+      </div>
+      <div class="plan-card plan-card--featured">
+        <span class="featured-tag">Most Loved</span>
+        <div class="plan-tier">Premium</div>
+        <h3>Premium Husband</h3>
+        <div class="plan-price">Free <sub>/ month</sub></div>
+        <ul class="plan-list">
+          <li>Unlimited hugs</li>
+          <li>Daily "I love you"</li>
+          <li>Weekend dates, guaranteed</li>
+          <li>Random surprises, no occasion needed</li>
+        </ul>
+        <button class="btn btn-primary btn-block" data-sub="Premium Husband">Subscribe</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-tier">Lifetime</div>
+        <h3>Wife's Lifetime VIP</h3>
+        <div class="plan-price">₹0 <sub>/ month, forever</sub></div>
+        <ul class="plan-list">
+          <li>Unlimited everything</li>
+          <li>Husband cannot cancel</li>
+          <li>Auto-renews forever</li>
+          <li>No downgrade option, ever</li>
+        </ul>
+        <button class="btn btn-ghost btn-block" data-sub="Wife's Lifetime VIP">Subscribe Forever</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>🛍️ HUSBANDMART — Every order shipped by one very committed husband.</div>
+    <div class="footer-links">
+      <a href="#" data-policy="about">About Us</a>
+      <a href="#" data-policy="shipping">Shipping Policy</a>
+      <a href="#" data-policy="returns">Return Policy</a>
+      <a href="#" data-policy="terms">Terms of Endearment</a>
+      <a href="#" data-policy="contact">Contact Husband</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>Your Cart</h3>
+    <button class="icon-btn" id="closeCart">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-foot" id="cartFoot">
+    <div class="cart-total-row"><span>Subtotal</span><span class="tab-num" id="cartSubtotal">₹0</span></div>
+    <button class="btn btn-primary btn-block" id="checkoutBtn" disabled>Proceed to Checkout ❤️</button>
+  </div>
+</div>
+
+<!-- Checkout Overlay -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-card">
+    <div class="co-close"><button class="icon-btn" id="closeCheckout">✕</button></div>
+
+    <div class="co-step active" id="step1">
+      <div class="eyebrow">Step 1 of 3</div>
+      <h3>Order Review</h3>
+      <div id="reviewLines" style="margin-top:14px;"></div>
+      <div class="co-total">
+        <span>Total</span>
+        <span class="new-total tab-num" id="reviewTotal">₹0</span>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:22px;" id="revealPriceBtn">Reveal My Real Price →</button>
+    </div>
+
+    <div class="co-step" id="step2">
+      <div class="eyebrow">Step 2 of 3</div>
+      <h3>Wait For It…</h3>
+      <p style="margin-top:10px;color:var(--muted);font-size:14.5px;">Since you're the wife of the world's luckiest husband —</p>
+      <div class="co-total" style="margin-top:18px;">
+        <span class="old-total tab-num" id="oldTotal">₹0</span>
+        <span class="new-total tab-num">₹0</span>
+      </div>
+      <div class="payment-card">
+        <div class="pc-radio"></div>
+        <div>
+          <b>Husband's Love™</b>
+          <span>Accepted everywhere. Never expires. No interest, ever.</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" style="margin-top:22px;" id="placeOrderBtn">Place Order ❤️</button>
+    </div>
+
+    <div class="co-step" id="step3">
+      <div class="eyebrow">Order Confirmed</div>
+      <h3 id="orderHeadline">Confirmed ❤️</h3>
+      <div class="order-id mono" id="orderId"></div>
+      <div style="margin-top:16px;">
+        <div class="co-shiprow"><span>Estimated delivery</span><b>Right now</b></div>
+        <div class="co-shiprow"><span>Shipping</span><b>Husband, personally</b></div>
+        <div class="co-shiprow"><span>Returns</span><b>Absolutely not</b></div>
+        <div class="co-shiprow"><span>Warranty</span><b>Lifetime</b></div>
+        <div class="co-shiprow"><span>Refund policy</span><b>One kiss required</b></div>
+      </div>
+      <div class="letter">
+        <p>Dear Wife,</p>
+        <p>Some things in this store can be bought. Chai, chocolate, even a certificate that says you were right.</p>
+        <p>Some things can't.</p>
+        <p>I can't buy you happiness every day. I can't promise we'll never fight, or that I'll always get it right.</p>
+        <p>But I can promise I'll keep choosing you — today, tomorrow, and every ordinary day after that.</p>
+        <p class="sign">— Your Husband</p>
+      </div>
+      <button class="btn btn-primary btn-block surprise-btn" id="surpriseBtn">One Last Surprise →</button>
+    </div>
+
+    <div class="co-step final-card" id="step4">
+      <div class="big-heart">❤️</div>
+      <h3>Your real gift is waiting.</h3>
+      <p>Some part of today, somewhere close by, is not a joke. Go find it.</p>
+      <p style="margin-top:4px;font-size:13px;">(Hint: closer than you think.)</p>
+      <button class="btn btn-ghost btn-block" style="margin-top:24px;" id="restartBtn">Back to Shopping</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
