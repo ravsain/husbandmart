@@ -10,9 +10,9 @@
      the full walkthrough and the template fields it expects.
      ========================================================= */
   var EMAILJS_CONFIG = {
-    serviceId: "PASTE_YOUR_SERVICE_ID",
-    templateId: "PASTE_YOUR_TEMPLATE_ID",
-    publicKey: "PASTE_YOUR_PUBLIC_KEY"
+    serviceId: "service_oaatunp",
+    templateId: "template_2gzitwt",
+    publicKey: "Yc0kSXPNuz85jV5SJ"
   };
 
   var emailjsReady = false;
