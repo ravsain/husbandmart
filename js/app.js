@@ -15,12 +15,22 @@
     publicKey: "Yc0kSXPNuz85jV5SJ"
   };
 
-  var emailjsReady = false;
-  if (window.emailjs && EMAILJS_CONFIG.publicKey.indexOf("PASTE_") !== 0) {
-    window.emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
-    emailjsReady = true;
-  } else {
-    console.warn("HusbandMart: EmailJS is not configured yet — order confirmations won't be emailed. See readme.md.");
+  var emailjsInitialized = false;
+
+  // Checked lazily (not just once at page load) so a slow-loading SDK
+  // script doesn't permanently disable sending for the rest of the visit.
+  function isEmailjsReady() {
+    if (EMAILJS_CONFIG.publicKey.indexOf("PASTE_") === 0) return false;
+    if (!window.emailjs) return false;
+    if (!emailjsInitialized) {
+      window.emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+      emailjsInitialized = true;
+    }
+    return true;
+  }
+
+  if (!isEmailjsReady()) {
+    console.warn("HusbandMart: EmailJS is not ready yet at page load — order confirmations won't be emailed. See readme.md.");
   }
 
   /* =========================================================
@@ -281,8 +291,8 @@
     statusEl.hidden = false;
     statusEl.className = "email-status";
 
-    if (!emailjsReady) {
-      statusEl.textContent = "✉️ Email sending isn't configured yet (see readme.md).";
+    if (!isEmailjsReady()) {
+      statusEl.textContent = "✉️ Email sending isn't ready — refresh the page and try again.";
       statusEl.classList.add("err");
       return;
     }

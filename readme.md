@@ -10,7 +10,9 @@ A fake e-commerce site where every "product" is a promise, not a purchase — hu
 ├── css/
 │   └── style.css   All styling, theme tokens (light/dark), layout, animation
 ├── js/
-│   └── app.js      Product catalog, cart logic, checkout flow, all interactivity
+│   ├── app.js      Product catalog, cart logic, checkout flow, all interactivity
+│   └── vendor/
+│       └── emailjs.min.js   EmailJS SDK, vendored locally (not loaded from a CDN — see note below)
 └── readme.md
 ```
 
@@ -74,6 +76,8 @@ EmailJS sends through *your own* connected Gmail/Outlook account, so it can emai
    };
    ```
 6. Commit and push — Pages picks it up automatically. Free tier is 200 emails/month, which is plenty for one order.
+
+The SDK itself (`js/vendor/emailjs.min.js`) is vendored into the repo rather than loaded from a CDN, since a CDN can be slow, blocked, or ad-blocked depending on the visitor's network — which otherwise silently breaks sending with no way to tell why. To update it later: `curl -s https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js -o js/vendor/emailjs.min.js`.
 
 ## Customizing
 
